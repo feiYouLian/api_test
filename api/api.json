@@ -1,0 +1,792 @@
+{
+  "host": "localhost:8888",
+  "apis": [
+    {
+      "tags": "fun-controller",
+      "path": "/oauth/fun/add",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "t": {
+              "id": "integer",
+              "moduleId": "integer",
+              "name": "string",
+              "permissionCode": "string",
+              "remark": "string",
+              "seq": "integer"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tags": "fun-controller",
+      "path": "/oauth/fun/add2",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "fun2": {
+              "id": "integer",
+              "moduleId": "integer",
+              "name": "string",
+              "permissionCode": "string",
+              "remark": "string",
+              "seq": "integer"
+            }
+          }
+        },
+        {
+          "position": "query",
+          "schema": {
+            "id": "integer|False",
+            "moduleId": "integer|False",
+            "name": "string|False",
+            "permissionCode": "string|False",
+            "remark": "string|False",
+            "seq": "integer|False",
+            "test": "string|True"
+          }
+        }
+      ]
+    },
+    {
+      "tags": "fun-controller",
+      "path": "/oauth/fun/add3",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "formData",
+          "schema": {
+            "file": "file|False"
+          }
+        },
+        {
+          "position": "query",
+          "schema": {
+            "id": "integer|False",
+            "moduleId": "integer|False",
+            "name": "string|False",
+            "permissionCode": "string|False",
+            "remark": "string|False",
+            "seq": "integer|False"
+          }
+        }
+      ]
+    },
+    {
+      "tags": "fun-controller",
+      "path": "/oauth/fun/delete",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "idList": [
+              "integer"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "tags": "fun-controller",
+      "path": "/oauth/fun/get",
+      "method": "get",
+      "parameters": [
+        {
+          "position": "query",
+          "schema": {
+            "id": "integer|True"
+          }
+        }
+      ]
+    },
+    {
+      "tags": "fun-controller",
+      "path": "/oauth/fun/page",
+      "method": "get",
+      "parameters": [
+        {
+          "position": "query",
+          "schema": {
+            "current": "integer|False",
+            "orders[0].asc": "boolean|False",
+            "orders[0].column": "string|False",
+            "params": "object|True",
+            "size": "integer|False",
+            "sort": "string|False"
+          }
+        }
+      ]
+    },
+    {
+      "tags": "fun-controller",
+      "path": "/oauth/fun/saveCascade",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "dto": {
+              "id": "integer",
+              "moduleId": "integer",
+              "name": "string",
+              "permId": "integer",
+              "permissionCode": "string",
+              "remark": "string",
+              "seq": "integer",
+              "url": "string"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tags": "fun-controller",
+      "path": "/oauth/fun/update",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "t": {
+              "id": "integer",
+              "moduleId": "integer",
+              "name": "string",
+              "permissionCode": "string",
+              "remark": "string",
+              "seq": "integer"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tags": "module-controller",
+      "path": "/oauth/module/add",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "t": {
+              "component": "string",
+              "hideInMenu": "integer",
+              "icon": "string",
+              "id": "integer",
+              "name": "string",
+              "parentId": "integer",
+              "path": "string",
+              "remark": "string",
+              "seq": "integer",
+              "title": "string"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tags": "module-controller",
+      "path": "/oauth/module/delete",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "idList": [
+              "integer"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "tags": "module-controller",
+      "path": "/oauth/module/get",
+      "method": "get",
+      "parameters": [
+        {
+          "position": "query",
+          "schema": {
+            "id": "integer|True"
+          }
+        }
+      ]
+    },
+    {
+      "tags": "module-controller",
+      "path": "/oauth/module/getFuns",
+      "method": "get",
+      "parameters": [
+        {
+          "position": "query",
+          "schema": {
+            "id": "integer|True"
+          }
+        }
+      ]
+    },
+    {
+      "tags": "module-controller",
+      "path": "/oauth/module/getParentSelect",
+      "method": "get",
+      "parameters": [
+        {
+          "position": "query",
+          "schema": {
+            "selfId": "integer|False"
+          }
+        }
+      ]
+    },
+    {
+      "tags": "module-controller",
+      "path": "/oauth/module/getTree",
+      "method": "get",
+      "parameters": []
+    },
+    {
+      "tags": "module-controller",
+      "path": "/oauth/module/page",
+      "method": "get",
+      "parameters": [
+        {
+          "position": "query",
+          "schema": {
+            "current": "integer|False",
+            "orders[0].asc": "boolean|False",
+            "orders[0].column": "string|False",
+            "params": "object|True",
+            "size": "integer|False",
+            "sort": "string|False"
+          }
+        }
+      ]
+    },
+    {
+      "tags": "module-controller",
+      "path": "/oauth/module/saveCascade",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "dto": {
+              "component": "string",
+              "hideInMenu": "integer",
+              "icon": "string",
+              "id": "integer",
+              "name": "string",
+              "parentId": "integer",
+              "path": "string",
+              "permId": "integer",
+              "remark": "string",
+              "seq": "integer",
+              "title": "string",
+              "url": "string"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tags": "module-controller",
+      "path": "/oauth/module/update",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "t": {
+              "component": "string",
+              "hideInMenu": "integer",
+              "icon": "string",
+              "id": "integer",
+              "name": "string",
+              "parentId": "integer",
+              "path": "string",
+              "remark": "string",
+              "seq": "integer",
+              "title": "string"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tags": "permission-controller",
+      "path": "/oauth/permission/add",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "t": {
+              "id": "integer",
+              "moduleFunId": "integer",
+              "type": "integer",
+              "url": "string"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tags": "permission-controller",
+      "path": "/oauth/permission/delete",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "idList": [
+              "integer"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "tags": "permission-controller",
+      "path": "/oauth/permission/get",
+      "method": "get",
+      "parameters": [
+        {
+          "position": "query",
+          "schema": {
+            "id": "integer|True"
+          }
+        }
+      ]
+    },
+    {
+      "tags": "permission-controller",
+      "path": "/oauth/permission/page",
+      "method": "get",
+      "parameters": [
+        {
+          "position": "query",
+          "schema": {
+            "current": "integer|False",
+            "orders[0].asc": "boolean|False",
+            "orders[0].column": "string|False",
+            "params": "object|True",
+            "size": "integer|False",
+            "sort": "string|False"
+          }
+        }
+      ]
+    },
+    {
+      "tags": "permission-controller",
+      "path": "/oauth/permission/update",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "t": {
+              "id": "integer",
+              "moduleFunId": "integer",
+              "type": "integer",
+              "url": "string"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tags": "role-controller",
+      "path": "/oauth/role/add",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "t": {
+              "id": "integer",
+              "name": "string",
+              "remark": "string"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tags": "role-controller",
+      "path": "/oauth/role/delete",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "idList": [
+              "integer"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "tags": "role-controller",
+      "path": "/oauth/role/get",
+      "method": "get",
+      "parameters": [
+        {
+          "position": "query",
+          "schema": {
+            "id": "integer|True"
+          }
+        }
+      ]
+    },
+    {
+      "tags": "role-controller",
+      "path": "/oauth/role/getPermissionTree",
+      "method": "get",
+      "parameters": []
+    },
+    {
+      "tags": "role-controller",
+      "path": "/oauth/role/getPermissions",
+      "method": "get",
+      "parameters": []
+    },
+    {
+      "tags": "role-controller",
+      "path": "/oauth/role/page",
+      "method": "get",
+      "parameters": [
+        {
+          "position": "query",
+          "schema": {
+            "current": "integer|False",
+            "orders[0].asc": "boolean|False",
+            "orders[0].column": "string|False",
+            "params": "object|True",
+            "size": "integer|False",
+            "sort": "string|False"
+          }
+        }
+      ]
+    },
+    {
+      "tags": "role-controller",
+      "path": "/oauth/role/update",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "t": {
+              "id": "integer",
+              "name": "string",
+              "remark": "string"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tags": "role-permission-rel-controller",
+      "path": "/oauth/rolePermissionRel/add",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "t": {
+              "id": "integer",
+              "permissionId": "integer",
+              "roleId": "integer"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tags": "role-permission-rel-controller",
+      "path": "/oauth/rolePermissionRel/delete",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "idList": [
+              "integer"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "tags": "role-permission-rel-controller",
+      "path": "/oauth/rolePermissionRel/get",
+      "method": "get",
+      "parameters": [
+        {
+          "position": "query",
+          "schema": {
+            "id": "integer|True"
+          }
+        }
+      ]
+    },
+    {
+      "tags": "role-permission-rel-controller",
+      "path": "/oauth/rolePermissionRel/page",
+      "method": "get",
+      "parameters": [
+        {
+          "position": "query",
+          "schema": {
+            "current": "integer|False",
+            "orders[0].asc": "boolean|False",
+            "orders[0].column": "string|False",
+            "params": "object|True",
+            "size": "integer|False",
+            "sort": "string|False"
+          }
+        }
+      ]
+    },
+    {
+      "tags": "role-permission-rel-controller",
+      "path": "/oauth/rolePermissionRel/update",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "t": {
+              "id": "integer",
+              "permissionId": "integer",
+              "roleId": "integer"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tags": "user-controller",
+      "path": "/oauth/user/add",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "t": {
+              "id": "integer",
+              "name": "string",
+              "nickname": "string",
+              "password": "string"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tags": "user-controller",
+      "path": "/oauth/user/delete",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "idList": [
+              "integer"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "tags": "user-controller",
+      "path": "/oauth/user/get",
+      "method": "get",
+      "parameters": [
+        {
+          "position": "query",
+          "schema": {
+            "id": "integer|True"
+          }
+        }
+      ]
+    },
+    {
+      "tags": "user-controller",
+      "path": "/oauth/user/getRoles",
+      "method": "get",
+      "parameters": []
+    },
+    {
+      "tags": "user-controller",
+      "path": "/oauth/user/info",
+      "method": "get",
+      "parameters": []
+    },
+    {
+      "tags": "user-controller",
+      "path": "/oauth/user/login",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "user": {
+              "id": "integer",
+              "name": "string",
+              "nickname": "string",
+              "password": "string"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tags": "user-controller",
+      "path": "/oauth/user/logout",
+      "method": "post",
+      "parameters": []
+    },
+    {
+      "tags": "user-controller",
+      "path": "/oauth/user/page",
+      "method": "get",
+      "parameters": [
+        {
+          "position": "query",
+          "schema": {
+            "current": "integer|False",
+            "orders[0].asc": "boolean|False",
+            "orders[0].column": "string|False",
+            "params": "object|True",
+            "size": "integer|False",
+            "sort": "string|False"
+          }
+        }
+      ]
+    },
+    {
+      "tags": "user-controller",
+      "path": "/oauth/user/save",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "userDTO": {
+              "id": "integer",
+              "name": "string",
+              "nickname": "string",
+              "password": "string",
+              "roleIds": "array"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tags": "user-controller",
+      "path": "/oauth/user/update",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "t": {
+              "id": "integer",
+              "name": "string",
+              "nickname": "string",
+              "password": "string"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tags": "user-role-rel-controller",
+      "path": "/oauth/userRoleRel/add",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "t": {
+              "id": "integer",
+              "roleId": "integer",
+              "userId": "integer"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tags": "user-role-rel-controller",
+      "path": "/oauth/userRoleRel/delete",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "idList": [
+              "integer"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "tags": "user-role-rel-controller",
+      "path": "/oauth/userRoleRel/get",
+      "method": "get",
+      "parameters": [
+        {
+          "position": "query",
+          "schema": {
+            "id": "integer|True"
+          }
+        }
+      ]
+    },
+    {
+      "tags": "user-role-rel-controller",
+      "path": "/oauth/userRoleRel/page",
+      "method": "get",
+      "parameters": [
+        {
+          "position": "query",
+          "schema": {
+            "current": "integer|False",
+            "orders[0].asc": "boolean|False",
+            "orders[0].column": "string|False",
+            "params": "object|True",
+            "size": "integer|False",
+            "sort": "string|False"
+          }
+        }
+      ]
+    },
+    {
+      "tags": "user-role-rel-controller",
+      "path": "/oauth/userRoleRel/update",
+      "method": "post",
+      "parameters": [
+        {
+          "position": "body",
+          "schema": {
+            "t": {
+              "id": "integer",
+              "roleId": "integer",
+              "userId": "integer"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
