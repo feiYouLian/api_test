@@ -13,17 +13,18 @@ cfg = Config()
 
 
 class LoginTest(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         loadApisDoc(cfg.doc_file)
 
     def test_login(self):
-        resp = doRequest('/oauth/user/login',
-                         [{'name': 'admin', 'password': '123456'}])
+        resp = doRequest('/user/login', [{
+            'name': 'admin',
+            'password': '123456'
+        }])
         self.assertEqual(resp.status_code, 200)
         self.assertIsNotNone(resp.json()['data']['token'])
-        self.assertEqual(resp.json()['data']['token'], '12345611')
+        self.assertEqual(resp.json()['data']['token'], '123456')
 
 
 if __name__ == "__main__":

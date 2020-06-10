@@ -8,15 +8,17 @@ from .util import getDictVal, getDocPath, writeJSON
 
 
 class Parameter(object):
-
     def __init__(self, position: str = '', schema: dict = {}):
         self.position = position
         self.schema = schema
 
 
 class Api(object):
-
-    def __init__(self, tags: str = '', path: str = '', method: str = '', parameters: List[Parameter] = []):
+    def __init__(self,
+                 tags: str = '',
+                 path: str = '',
+                 method: str = '',
+                 parameters: List[Parameter] = []):
         self.tags = tags
         self.path = path
         self.method = method
@@ -56,7 +58,6 @@ class Api(object):
 
 
 class Doc(object):
-
     def __init__(self, host: str = '', apis: List[Api] = []):
         self.host = host
         self.apis = apis
@@ -141,9 +142,9 @@ def parseApiParam(doc: dict, parameters: list) -> List[Parameter]:
 
             if paramType == 'array':
                 itemsType = getDictVal(getDictVal(param, 'items'), 'type')
-                schema[paramName] = [itemsType+"|"+str(paramNeed)]
+                schema[paramName] = [itemsType + "|" + str(paramNeed)]
             else:
-                schema[paramName] = paramType+"|"+str(paramNeed)
+                schema[paramName] = paramType + "|" + str(paramNeed)
 
         elif paramSchema is not None:
 
@@ -158,9 +159,10 @@ def parseApiParam(doc: dict, parameters: list) -> List[Parameter]:
             elif schemaRef is not None:
                 definitions = getDictVal(doc, 'definitions')
                 refs = schemaRef.split("/")
-                refDesc = getDictVal(definitions, refs[len(refs)-1])
+                refDesc = getDictVal(definitions, refs[len(refs) - 1])
                 props = {}
-                for prop, propDesc in getDictVal(refDesc, 'properties').items():
+                for prop, propDesc in getDictVal(refDesc,
+                                                 'properties').items():
                     props[prop] = getDictVal(propDesc, 'type')
                 schema[paramName] = props
 

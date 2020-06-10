@@ -19,7 +19,7 @@ def loadApisDoc(fileName: str):
 
 def genApiMetaData(path: str, parameters: List[dict]):
     method = 'get'
-    url = 'http://'+getDictVal(apis, 'host') + path
+    url = 'http://' + getDictVal(apis, 'host') + path
     params = None
     data = None
     files = None
@@ -59,7 +59,12 @@ def genApiMetaData(path: str, parameters: List[dict]):
 
 def doRequest(path: str, parameters: List[dict], **kwargs):
     method, url, params, data, files, json = genApiMetaData(path, parameters)
-    resp = requests.request(method, url, params=params,
-                            data=data, files=files, json=json, **kwargs)
+    resp = requests.request(method,
+                            url,
+                            params=params,
+                            data=data,
+                            files=files,
+                            json=json,
+                            **kwargs)
     print(resp.status_code)
     return resp
