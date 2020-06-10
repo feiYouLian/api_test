@@ -31,5 +31,5 @@ def writeJSON(filePath: str, obj: object):
 
 
 def readJSON(filePath: str) -> object:
-    with open(filePath, 'r') as f:
+    with open(filePath, 'rb') as f:
         return json.load(f)
