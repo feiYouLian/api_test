@@ -15,10 +15,12 @@ class Parameter(object):
 
 class Api(object):
     def __init__(self,
+                 summary: str = '',
                  tags: str = '',
                  path: str = '',
                  method: str = '',
                  parameters: List[Parameter] = []):
+        self.summary = summary
         self.tags = tags
         self.path = path
         self.method = method
@@ -79,11 +81,6 @@ class Doc(object):
     #     self.__apis = apis
 
 
-def aceessApiDoc(url: str) -> dict:
-    r = requests.get(url)
-    return r.json()
-
-
 def parseApiDoc(doc: dict) -> Doc:
     d = Doc()
 
@@ -102,27 +99,27 @@ def parseApiDoc(doc: dict) -> Doc:
     return d
 
 
-def parseOneApi(doc: dict, apidesc: dict) -> Api:
+def parseOneApi(doc: dict, apidoc: dict) -> Api:
     api = Api()
-
-    api.tags = ','.join(getDictVal(apidesc, 'tags'))
-    parameters = getDictVal(apidesc, 'parameters')
-    if parameters is not None:
-        api.parameters = parseApiParam(doc, parameters)
+    api.summary = getDictVal(apidoc, 'summary')
+    api.tags = ','.join(getDictVal(apidoc, 'tags'))
+    paramListDoc = getDictVal(apidoc, 'parameters')
+    if paramListDoc is not None:
+        api.parameters = parseApiParam(doc, paramListDoc)
     return api
 
 
-def parseApiParam(doc: dict, parameters: list) -> List[Parameter]:
-    params: List[Parameter] = []
+def parseApiParam(doc: dict, paramListDoc: list) -> List[Parameter]:
+    parameterList: List[Parameter] = []
 
-    for param in parameters:
+    for paramDoc in paramListDoc:
 
-        paramIn = getDictVal(param, 'in')
-        paramName = getDictVal(param, 'name')
-        paramNeed = getDictVal(param, 'required')
+        paramIn = getDictVal(paramDoc, 'in')
+        paramName = getDictVal(paramDoc, 'name')
+        paramNeed = getDictVal(paramDoc, 'required')
 
-        paramType = getDictVal(param, 'type')
-        paramSchema = getDictVal(param, 'schema')
+        paramType = getDictVal(paramDoc, 'type')
+        paramSchema = getDictVal(paramDoc, 'schema')
 
         schemaType = getDictVal(paramSchema, 'type')
         schemaRef = getDictVal(paramSchema, '$ref')
@@ -130,7 +127,7 @@ def parseApiParam(doc: dict, parameters: list) -> List[Parameter]:
         index = -1
         parameter = Parameter()
         schema = {}
-        for idx, p in enumerate(params):
+        for idx, p in enumerate(parameterList):
             if p.position == paramIn:
                 parameter = p
                 index = idx
@@ -141,7 +138,7 @@ def parseApiParam(doc: dict, parameters: list) -> List[Parameter]:
         if paramType is not None:
 
             if paramType == 'array':
-                itemsType = getDictVal(getDictVal(param, 'items'), 'type')
+                itemsType = getDictVal(getDictVal(paramDoc, 'items'), 'type')
                 schema[paramName] = [itemsType + "|" + str(paramNeed)]
             else:
                 schema[paramName] = paramType + "|" + str(paramNeed)
@@ -159,23 +156,33 @@ def parseApiParam(doc: dict, parameters: list) -> List[Parameter]:
             elif schemaRef is not None:
                 definitions = getDictVal(doc, 'definitions')
                 refs = schemaRef.split("/")
-                refDesc = getDictVal(definitions, refs[len(refs) - 1])
+                refType = refs[len(refs) - 1]
+                refDesc = getDictVal(definitions, refType)
                 props = {}
-                for prop, propDesc in getDictVal(refDesc,
-                                                 'properties').items():
-                    props[prop] = getDictVal(propDesc, 'type')
-                schema[paramName] = props
+                if refDesc is not None:
+                    for prop, propDesc in getDictVal(refDesc,
+                                                     'properties').items():
+                        props[prop] = getDictVal(propDesc, 'type')
+                    schema[paramName] = props
+                else:
+                    schema[paramName] = refType + "|" + str(paramNeed)
 
         parameter.schema = schema
         if index < 0:
-            params.append(parameter)
+            parameterList.append(parameter)
         else:
-            params[index] = parameter
-    return params
+            parameterList[index] = parameter
+    return parameterList
 
 
 def generateDoc(url: str, fileName: str):
-    doc = aceessApiDoc(url)
+    session = requests.session()
+    generateDoc2(session, url, fileName)
+
+
+def generateDoc2(session: requests.Session, url: str, fileName: str):
+    r = session.get(url)
+    doc = r.json()
     docObj = parseApiDoc(doc)
 
     filepath = getDocPath(fileName)

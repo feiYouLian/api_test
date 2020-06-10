@@ -24,6 +24,7 @@ def genApiMetaData(path: str, parameters: List[dict]):
     data = None
     files = None
     json = None
+    headers = None
 
     apiDoc = None
     for api in getDictVal(apis, 'apis'):
@@ -41,6 +42,8 @@ def genApiMetaData(path: str, parameters: List[dict]):
 
     for idx, p in enumerate(parametersDoc):
         position = getDictVal(p, 'position')
+        if position == 'header':
+            headers = parameters[idx]
         if position == 'query' and method == 'get':
             params = parameters[idx]
         elif position == 'query' and method == 'post':
@@ -54,21 +57,29 @@ def genApiMetaData(path: str, parameters: List[dict]):
         params = data
         data = None
 
-    return method, url, params, data, files, json
+    return method, url, params, data, files, json, headers
 
 
 def doRequest(path: str, parameters: List[dict],
               **kwargs) -> requests.Response:
 
-    method, url, params, data, files, json = genApiMetaData(path, parameters)
-    resp = requests.request(method,
-                            url,
-                            params=params,
-                            data=data,
-                            files=files,
-                            json=json,
-                            **kwargs)
-    print(resp.status_code)
+    method, url, params, data, files, json, headers = genApiMetaData(
+        path, parameters)
+    if getDictVal(kwargs, 'headers') is None:
+        kwargs['headers'] = headers
+    else:
+        kwargs['headers'] = dict(headers, **kwargs['headers'])
+
+    resp = requests.request(
+        method,
+        url,
+        params=params,
+        data=data,
+        files=files,
+        json=json,
+        # headers=headers,
+        **kwargs)
+    print(resp.text)
     return resp
 
 

@@ -42,4 +42,12 @@ class TestMathFunc(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main(verbosity=2)
+    # unittest.main(verbosity=2)
+    d1 = {"barcode": "123456"}
+    d2 = {'User-Agent:': 'tester'}
+
+    for k, v in d2.items():
+        print(type(k))
+
+    for k1, v1 in dict(d1, **d2).items():
+        print(type(k1))

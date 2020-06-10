@@ -22,9 +22,12 @@ def writeJSON(filePath: str, obj: object):
     dirpath = os.path.dirname(filePath)
     if not os.path.exists(dirpath):
         os.makedirs(dirpath)
-    content = json.dumps(obj, default=lambda ohj: ohj.__dict__, indent=2)
-    with open(filePath, 'w') as f:
-        f.write(content)
+    content = json.dumps(obj,
+                         default=lambda ohj: ohj.__dict__,
+                         indent=2,
+                         ensure_ascii=False)
+    with open(filePath, 'wb') as f:
+        f.write(content.encode('utf8'))
 
 
 def readJSON(filePath: str) -> object:

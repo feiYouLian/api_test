@@ -9,13 +9,28 @@ from conf.config import Config
 
 cfg = Config()
 
+#########################
+emptyAuth = {'Authorization': ''}
+loginUser = {
+    "username": "admin",
+    "password": "111111",
+}
+antifakeCode = {"barcode": "123456"}
+
+testHeader = {'User-Agent': 'tester'}
+
 
 def login():
-    return doRequest('/user/login', [{'name': 'admin', 'password': '123456'}])
+    return doRequest('/winApi/auth', [emptyAuth, loginUser],
+                     headers=testHeader)
 
 
-def logout(accesstoken: str):
-    return doRequest('/user/logout', [], headers={'accesstoken': accesstoken})
+def antifake(authorization: str):
+    return doRequest('/winApi/channel/antifake',
+                     [{
+                         'Authorization': authorization
+                     }, antifakeCode],
+                     headers=testHeader)
 
 
 class LoginTest(unittest.TestCase):
@@ -23,15 +38,20 @@ class LoginTest(unittest.TestCase):
     def setUpClass(cls):
         loadApisDoc(cfg.doc_file)
 
+    def test_antifake(self):
+        r = login()
+        r4 = antifake(r.json()['data']['token'])
+        self.assertNotEqual(r4.status_code, 200)
+
     def test_login(self):
         r = login()
         self.assertEqual(r.status_code, 200)
         self.assertIsNotNone(r.json()['data']['token'])
 
-        r2 = logout('')
-        self.assertEqual(r2.status_code, 401)
+        r2 = antifake('')
+        self.assertNotAlmostEquals(r2.status_code, 200)
 
-        r4 = logout(r.json()['data']['token'])
+        r4 = antifake(r.json()['data']['token'])
         self.assertEqual(r4.status_code, 200)
 
 
@@ -39,8 +59,8 @@ if __name__ == '__main__':
     # unittest.main()
 
     suite = unittest.TestSuite()
-    suite.addTest(LoginTest('test_login'))
-    # suite.addTests(unittest.TestLoader().loadTestsFromTestCase(LoginTest))
+    # suite.addTest(LoginTest('test_login'))
+    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(LoginTest))
 
     with open(cfg.doc_html, 'wb') as f:
         runner = HTMLTestRunner(stream=f,
