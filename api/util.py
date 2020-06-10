@@ -15,7 +15,7 @@ def getDictVal(d, key):
 
 def getDocPath(fileName: str) -> str:
     # return os.path.join(os.path.abspath(''), fileName)
-    return os.path.join(sys.path[0], 'api', fileName)
+    return os.path.join(sys.path[0], fileName)
 
 
 def writeJSON(filePath: str, obj: object):

@@ -1,27 +1,4 @@
 import unittest
-from api.access import *
-
-from conf.config import Config
-
-cfg = Config()
-
-loadApisDoc(cfg.doc_file)
-
-
-def add(a, b):
-    return a+b
-
-
-def minus(a, b):
-    return a-b
-
-
-def multi(a, b):
-    return a*b
-
-
-def divide(a, b):
-    return a/b
 
 
 class TestMathFunc(unittest.TestCase):
@@ -44,26 +21,24 @@ class TestMathFunc(unittest.TestCase):
     def tearDown(self):
         print("这里是一个测试用例后的清理工作")
 
-    @unittest.skip("我想临时跳过这个测试用例.")
-    def test_add(self):
-        self.assertEqual(3, add(1, 2))
-        self.assertNotEqual(3, add(2, 2))  # 测试业务方法add
+    # @unittest.skip(reason) // 无条件跳过
+    # @unittest.skipIf(condition, reason) // 当condition为True时跳过
+    # @unittest.skipUnless(condition, reason) // 当condition为False时跳过
+    @unittest.skipIf(True, "我想临时跳过这个测试用例.")
+    def test_1(self):
+        self.assertEqual(2, 3)
 
-    def test_minus(self):
-        self.skipTest('跳过这个测试用例')
-        self.assertEqual(1, minus(3, 2))  # 测试业务方法minus
+    def test_2(self):
+        self.assertEqual(1, 1)
+        self.skipTest('跳过后面的测试用例')
+        self.assertEqual(1, 2)
+        self.assertEqual(1, 2)
 
-    def test_multi(self):
-        self.assertEqual(6, multi(3, 2))  # 测试业务方法multi
-        resp = doRequest('/oauth/user/login',
-                         [{'name': 'admin', 'password': '123456'}])
-        self.assertEqual(resp.status_code, 200)
-        self.assertIsNotNone(resp.json()['data']['token'])
-        self.assertEqual(resp.json()['data']['token'], '11111')
+    def test_3(self):
+        self.assertEqual(6, 6)
 
-    def test_divide(self):
-        self.assertEqual(2, divide(6, 3))  # 测试业务方法divide
-        self.assertEqual(2.5, divide(5, 2))
+    def test_4(self):
+        self.assertEqual(2, 2)
 
 
 if __name__ == '__main__':

@@ -57,7 +57,9 @@ def genApiMetaData(path: str, parameters: List[dict]):
     return method, url, params, data, files, json
 
 
-def doRequest(path: str, parameters: List[dict], **kwargs):
+def doRequest(path: str, parameters: List[dict],
+              **kwargs) -> requests.Response:
+
     method, url, params, data, files, json = genApiMetaData(path, parameters)
     resp = requests.request(method,
                             url,
@@ -66,5 +68,20 @@ def doRequest(path: str, parameters: List[dict], **kwargs):
                             files=files,
                             json=json,
                             **kwargs)
+    print(resp.status_code)
+    return resp
+
+
+def doRequest2(session: requests.Session, path: str, parameters: List[dict],
+               **kwargs) -> requests.Response:
+
+    method, url, params, data, files, json = genApiMetaData(path, parameters)
+    resp = session.request(method,
+                           url,
+                           params=params,
+                           data=data,
+                           files=files,
+                           json=json,
+                           **kwargs)
     print(resp.status_code)
     return resp
