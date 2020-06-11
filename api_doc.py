@@ -11,6 +11,11 @@ if __name__ == "__main__":
     cfg = Config()
     doc_url = cfg.doc_url
     doc_file = cfg.doc_file
+
+    # 生成文档 api.json
+    # generateDoc(doc_url,doc_file)
+
+    # 针对有权限拦截的文档路径
     # 登录
     session = requests.session()
     r = session.post('http://10.87.200.21:8875/login',
@@ -21,6 +26,3 @@ if __name__ == "__main__":
     print(r.status_code)
     # 生成文档 api.json
     generateDoc2(session, doc_url, doc_file)
-
-    # 生成文档 api.json
-    # generateDoc(doc_url,doc_file)

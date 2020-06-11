@@ -62,7 +62,10 @@ def genApiMetaData(path: str, parameters: List[dict]):
 
 def doRequest(path: str, parameters: List[dict],
               **kwargs) -> requests.Response:
-
+    '''
+    :param path: 对应 api.json 中 接口path 属性, 
+    :param parameters: 对应 api.json 中 接口parameters列表中的 schema 属性, 顺序保持一致
+    '''
     method, url, params, data, files, json, headers = genApiMetaData(
         path, parameters)
 
