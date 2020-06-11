@@ -59,7 +59,7 @@ html = HTMLReport.html // 生成的测试报告名
 > python api_doc.py
 ```
 
-[代码实现]("./api_doc.py")
+[代码实现](./api_doc.py)
 
 4. `api.json`结构example
 ```json
@@ -123,4 +123,4 @@ if __name__ == '__main__':
 
 6. 接口测试
 
-[代码参考]("./api_test.py")
+[代码参考](./api_test.py)
