@@ -26,16 +26,6 @@ def login():
                      headers=testHeader)
 
 
-def login3():
-    return doRequest('/winApi/auth', [{
-        "Authorization": "your express"
-    }, {
-        "imei": "your express",
-        "password": "your express",
-        "username": "your express"
-    }])
-
-
 def login2(username: str, password: str):
     return doRequest(
         '/winApi/auth',
