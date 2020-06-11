@@ -7,13 +7,11 @@ def login():
     :param path: 对应 api.json 中 接口path 属性, 
     :param parameters: 对应 api.json 中 接口parameters列表中的 schema 属性, 顺序保持一致
     '''
-    return doRequest('/winApi/auth', [{
-        "Authorization": "your express"
-    }, {
-        "imei": "your express",
-        "password": "your express",
-        "username": "your express"
-    }])
+    return doRequest('/user/delete', [
+        {
+            "idList": [10, 11]
+        },
+    ])
 
 
 if __name__ == '__main__':
