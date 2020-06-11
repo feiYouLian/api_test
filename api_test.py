@@ -15,6 +15,7 @@ loginUser = {
     "username": "admin",
     "password": "111111",
 }
+
 antifakeCode = {"barcode": "123456"}
 
 testHeader = {'User-Agent': 'tester'}
@@ -23,6 +24,16 @@ testHeader = {'User-Agent': 'tester'}
 def login():
     return doRequest('/winApi/auth', [emptyAuth, loginUser],
                      headers=testHeader)
+
+
+def login2(username: str, password: str):
+    return doRequest(
+        '/winApi/auth',
+        [emptyAuth, {
+            "username": username,
+            "password": password,
+        }],
+        headers=testHeader)
 
 
 def antifake(authorization: str):
@@ -44,15 +55,24 @@ class LoginTest(unittest.TestCase):
         self.assertNotEqual(r4.status_code, 200)
 
     def test_login(self):
-        r = login()
-        self.assertEqual(r.status_code, 200)
-        self.assertIsNotNone(r.json()['data']['token'])
+        r = login2("", "")
+        self.assertNotEqual(r.status_code, 200)
 
-        r2 = antifake('')
-        self.assertNotAlmostEquals(r2.status_code, 200)
+        r2 = login2("admin", "")
+        self.assertNotEqual(r2.status_code, 200)
 
-        r4 = antifake(r.json()['data']['token'])
+        r3 = login2("admin", "admin")
+        self.assertNotEqual(r3.status_code, 200)
+
+        r4 = login2("admin", "111111")
         self.assertEqual(r4.status_code, 200)
+        self.assertIsNotNone(r4.json()['data']['token'])
+
+        r5 = antifake('')
+        self.assertNotEqual(r5.status_code, 200)
+
+        r6 = antifake(r4.json()['data']['token'])
+        self.assertEqual(r6.status_code, 200)
 
 
 if __name__ == '__main__':

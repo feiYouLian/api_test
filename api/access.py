@@ -44,7 +44,7 @@ def genApiMetaData(path: str, parameters: List[dict]):
         position = getDictVal(p, 'position')
         if position == 'header':
             headers = parameters[idx]
-        if position == 'query' and method == 'get':
+        elif position == 'query' and method == 'get':
             params = parameters[idx]
         elif position == 'query' and method == 'post':
             data = parameters[idx]
@@ -65,6 +65,7 @@ def doRequest(path: str, parameters: List[dict],
 
     method, url, params, data, files, json, headers = genApiMetaData(
         path, parameters)
+
     if getDictVal(kwargs, 'headers') is None:
         kwargs['headers'] = headers
     else:
