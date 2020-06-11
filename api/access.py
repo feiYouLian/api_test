@@ -44,6 +44,10 @@ def genApiMetaData(path: str, parameters: List[dict]):
         position = getDictVal(p, 'position')
         if position == 'header':
             headers = parameters[idx]
+        elif position == 'path':
+            param = parameters[idx]
+            for k, v in param.items():
+                url = url.replace('{' + k + '}', str(v))
         elif position == 'query' and method == 'get':
             params = parameters[idx]
         elif position == 'query' and method == 'post':
