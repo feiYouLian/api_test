@@ -43,6 +43,14 @@ api_test
 ├─requirements.txt
 ├─test.py
 ```
+2. 安装依赖
+
+```shell
+> cd api_test
+> pip install -r requirements.txt -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com
+> pip3 freeze  > requirements.txt 
+```
+
 2. config
 
 ```properties
