@@ -45,13 +45,13 @@ def parseApiDoc(doc: dict) -> Doc:
 
     d.host = getDictVal(doc, 'host')
 
-    paths = getDictVal(doc, 'paths')
+    pathListDoc = getDictVal(doc, 'paths')
     apis = []
-    for path, desc in paths.items():
-        for method, apidesc in desc.items():
-            api = parseOneApi(doc, apidesc)
-            api.path = path
+    for path, pathDoc in pathListDoc.items():
+        for method, apidoc in pathDoc.items():
+            api = parseOneApi(doc, apidoc)
 
+            api.path = path
             api.method = method
             apis.append(api)
 
@@ -65,11 +65,11 @@ def parseOneApi(doc: dict, apidoc: dict) -> Api:
     api.tags = ','.join(getDictVal(apidoc, 'tags'))
     paramListDoc = getDictVal(apidoc, 'parameters')
     if paramListDoc is not None:
-        api.parameters = parseApiParam2(doc, paramListDoc)
+        api.parameters = parseApiParam(doc, paramListDoc)
     return api
 
 
-def parseApiParam2(doc: dict, paramListDoc: list) -> List[Parameter]:
+def parseApiParam(doc: dict, paramListDoc: list) -> List[Parameter]:
     parameterList: List[Parameter] = []
 
     for paramDoc in paramListDoc:
@@ -119,18 +119,19 @@ def parseBodyParameter(doc: dict, paramDoc: dict, bodyParameter: Parameter):
             schema = paramName + "|" + schemaType + "|" + str(paramNeed)
     else:
         if schemaRef is not None:
-            definitions = getDictVal(doc, 'definitions')
+            definitionListDoc = getDictVal(doc, 'definitions')
             refs = schemaRef.split("/")
             refType = refs[len(refs) - 1]
-            refDesc = getDictVal(definitions, refType)
-            props = {}
-            if refDesc is not None:
-                for prop, propDesc in getDictVal(refDesc,
-                                                 'properties').items():
-                    props[prop] = getDictVal(propDesc, 'type')
+            refDoc = getDictVal(definitionListDoc, refType)
+
+            if refDoc is not None:
+                props = {}
+                for prop, propDoc in getDictVal(refDoc, 'properties').items():
+                    props[prop] = getDictVal(propDoc, 'type')
                 schema = props
             else:
                 schema[paramName] = refType + "|" + str(paramNeed)
+
     bodyParameter.schema = schema
 
 
