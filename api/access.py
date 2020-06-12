@@ -82,7 +82,7 @@ def doRequest2(session: requests.Session, path: str, parameters: List[dict],
     :param session: 对应 requests.Session 对象, 
     :param path: 对应 api.json 中 接口path 属性, 
     :param parameters: 对应 api.json 中 接口parameters列表中的 schema 属性, 顺序保持一致
-    :param **kwargs: 对应 requests 中除了 params, data, files, json, 以外的其他属性
+    :param **kwargs: 对应 requests 中除了 method, url, params, data, files, json, 以外的其他属性
     '''
     method, url, params, data, files, json, headers = genApiMetaData(
         path, parameters)

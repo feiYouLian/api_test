@@ -11,9 +11,7 @@ from .util import getDictVal, getDocPath, writeJSON
 class Parameter(object):
     def __init__(self, position: str = '', schema=None):
         self.position = position
-        if schema is None:
-            schema = {}
-        self.schema = schema
+        self.schema = schema if schema is not None else {}
 
 
 class Api(object):
@@ -27,17 +25,13 @@ class Api(object):
         self.tags = tags
         self.path = path
         self.method = method
-        if parameters is None:
-            parameters = []
-        self.parameters = parameters
+        self.parameters = parameters if parameters is not None else []
 
 
 class Doc(object):
     def __init__(self, host: str = '', apis: List[Api] = None):
         self.host = host
-        if apis is None:
-            apis = []
-        self.apis = apis
+        self.apis = apis if apis is not None else []
 
 
 def parseApiDoc(doc: dict) -> Doc:
@@ -75,6 +69,9 @@ def parseApiParam(doc: dict, paramListDoc: list) -> List[Parameter]:
     for paramDoc in paramListDoc:
 
         paramIn = getDictVal(paramDoc, 'in')
+        paramName = getDictVal(paramDoc, 'name')
+        paramType = getDictVal(paramDoc, 'type')
+        paramNeed = getDictVal(paramDoc, 'required')
 
         index = -1
         parameter = Parameter()
@@ -82,15 +79,26 @@ def parseApiParam(doc: dict, paramListDoc: list) -> List[Parameter]:
             if p.position == paramIn:
                 parameter = p
                 index = idx
-                schema = parameter.schema
                 break
 
         parameter.position = paramIn
 
         if parameter.position == 'body':
-            parseBodyParameter(doc, paramDoc, parameter)
+            parameter.schema = parseProp(doc, paramDoc, paramType, paramNeed)
         else:
-            parseNormalParameter(doc, paramDoc, parameter)
+            if '[0]' in paramName:
+                paramNameList = paramName.split('[0].')
+                paramName_0 = paramNameList[0]
+                paramName_1 = paramNameList[1]
+                if getDictVal(parameter.schema, paramName_0) is None:
+                    parameter.schema[paramName_0] = {}
+
+                parameter.schema[paramName_0][paramName_1] = parseProp(
+                    doc, paramDoc, paramType, paramNeed)
+
+            else:
+                parameter.schema[paramName] = parseProp(
+                    doc, paramDoc, paramType, paramNeed)
 
         if index < 0:
             parameterList.append(parameter)
@@ -100,62 +108,40 @@ def parseApiParam(doc: dict, paramListDoc: list) -> List[Parameter]:
     return parameterList
 
 
-def parseBodyParameter(doc: dict, paramDoc: dict, bodyParameter: Parameter):
-    schema = bodyParameter.schema
+def parseProp(doc: dict, propDoc: dict, propType: str, isNeed: bool):
 
-    paramName = getDictVal(paramDoc, 'name')
-    paramNeed = getDictVal(paramDoc, 'required')
+    if propType is not None:
+        if propType == 'array':
+            itemsDoc = getDictVal(propDoc, 'items')
+            itemsType = getDictVal(itemsDoc, 'type')
+            return [parseProp(doc, itemsDoc, itemsType, isNeed)]
 
-    paramSchemaDoc = getDictVal(paramDoc, 'schema')
-    schemaType = getDictVal(paramSchemaDoc, 'type')
-    schemaRef = getDictVal(paramSchemaDoc, '$ref')
+        return propType + "|" + str(isNeed)
+
+    schemaDoc = getDictVal(propDoc, 'schema')
+    schemaType = getDictVal(schemaDoc, 'type')
 
     if schemaType is not None:
-        if schemaType == 'array':
-            schemaItemsType = getDictVal(getDictVal(paramSchemaDoc, 'items'),
-                                         'type')
-            schema = [paramName + "|" + schemaItemsType + "|" + str(paramNeed)]
-        else:
-            schema = paramName + "|" + schemaType + "|" + str(paramNeed)
+        return parseProp(doc, schemaDoc, schemaType, isNeed)
+
+    schemaRef = None
+    if getDictVal(schemaDoc, '$ref') is not None:
+        schemaRef = getDictVal(schemaDoc, '$ref')
     else:
-        if schemaRef is not None:
-            definitionListDoc = getDictVal(doc, 'definitions')
-            refs = schemaRef.split("/")
-            refType = refs[len(refs) - 1]
-            refDoc = getDictVal(definitionListDoc, refType)
+        schemaRef = getDictVal(propDoc, '$ref')
 
-            if refDoc is not None:
-                props = {}
-                for prop, propDoc in getDictVal(refDoc, 'properties').items():
-                    props[prop] = getDictVal(propDoc, 'type')
-                schema = props
-            else:
-                schema[paramName] = refType + "|" + str(paramNeed)
+    refs = schemaRef.split("/") if schemaRef is not None else ['']
+    refType = refs[len(refs) - 1]
+    refDoc = getDictVal(getDictVal(doc, 'definitions'), refType)
 
-    bodyParameter.schema = schema
+    if refDoc is not None:
+        props = {}
+        for p, pdoc in getDictVal(refDoc, 'properties').items():
+            pType = getDictVal(pdoc, 'type')
+            props[p] = parseProp(doc, pdoc, pType, isNeed)
+        return props
 
-
-def parseNormalParameter(doc: dict, paramDoc: dict, parameter: Parameter):
-
-    schema = parameter.schema
-
-    paramName = getDictVal(paramDoc, 'name')
-    paramNeed = getDictVal(paramDoc, 'required')
-    paramType = getDictVal(paramDoc, 'type')
-
-    if paramType is None:
-        paramSchemaDoc = getDictVal(paramDoc, 'schema')
-        schemaType = getDictVal(paramSchemaDoc, 'type')
-        if schemaType is not None:
-            paramType = schemaType
-        else:
-            schemaRef = getDictVal(paramSchemaDoc, '$ref')
-            refs = schemaRef.split("/")
-            paramType = refs[len(refs) - 1]
-
-    schema[paramName] = paramType + "|" + str(paramNeed)
-
-    parameter.schema = schema
+    return refType + "|" + str(isNeed)
 
 
 def generateDoc(url: str, fileName: str):
