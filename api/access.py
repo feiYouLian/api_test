@@ -99,5 +99,28 @@ def doRequest2(session: requests.Session, path: str, parameters: List[dict],
                            files=files,
                            json=json,
                            **kwargs)
-    print(resp.status_code)
+
+    print('\r\n-------------------------------------------')
+    print(url)
+    print('method:', method)
+    if kwargs['headers'] is not None:
+        print('headers:', kwargs['headers'])
+
+    if params is not None:
+        print('params:', params)
+
+    if data is not None:
+        print('data:', data)
+
+    if files is not None:
+        f = []
+        for k in files.keys():
+            f.append(k)
+        print('files:', f)
+
+    if json is not None:
+        print('json:', json)
+
+    print('response:', resp.text)
+
     return resp
