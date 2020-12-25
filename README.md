@@ -1,12 +1,14 @@
 # 1. api_test
+
 <!-- TOC -->
 
 - [1. api_test](#1-api_test)
-    - [1.1. background](#11-background)
-    - [1.2. good point](#12-good-point)
-    - [1.3. usage](#13-usage)
+  - [1.1. background](#11-background)
+  - [1.2. good point](#12-good-point)
+  - [1.3. usage](#13-usage)
 
 <!-- /TOC -->
+
 ## 1.1. background
 
 针对 `spring boot` 的 `swagger`接口文档，生成**测试人员**能**测试**用的接口文档-`api.json`
@@ -20,6 +22,7 @@
 ## 1.3. usage
 
 1. 目录结构
+
 ```
 api_test
 ├─api
@@ -43,12 +46,13 @@ api_test
 ├─requirements.txt
 ├─test.py
 ```
+
 2. 安装依赖
 
 ```shell
 > cd api_test
 > pip install -r requirements.txt -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com
-> pip3 freeze  > requirements.txt 
+> pip3 freeze  > requirements.txt
 ```
 
 2. config
@@ -69,7 +73,8 @@ html = HTMLReport.html // 生成的测试报告名
 
 [代码实现](./api_doc.py)
 
-4. `api.json`结构example
+4. `api.json`结构 example
+
 ```json
 {
   "host": "10.87.200.21:8875",
@@ -98,7 +103,6 @@ html = HTMLReport.html // 生成的测试报告名
     }
   ]
 }
-
 ```
 
 5. 根据`api.json`访问接口
@@ -110,7 +114,7 @@ from conf.config import Config
 
 def login():
     '''
-    :param path: 对应 api.json 中 接口path 属性, 
+    :param path: 对应 api.json 中 接口path 属性,
     :param parameters: 对应 api.json 中 接口parameters列表中的 schema 属性, 顺序保持一致
     '''
     return doRequest('/winApi/auth', [{

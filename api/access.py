@@ -7,19 +7,19 @@ import requests
 import json
 import os
 
-from .util import getDictVal, getDocPath, readJSON
+from . import util
 
 apis = object()
 
 
 def loadApisDoc(fileName: str):
     global apis
-    apis = readJSON(getDocPath(fileName))
+    apis = util.readJSON(util.getDocPath(fileName))
 
 
 def genApiMetaData(path: str, parameters: List[dict]):
     method = 'get'
-    url = 'http://' + getDictVal(apis, 'host') + path
+    url = 'http://' + util.getDictVal(apis, 'host') + path
     params = None
     data = None
     files = None
@@ -27,22 +27,22 @@ def genApiMetaData(path: str, parameters: List[dict]):
     headers = None
 
     apiDoc = None
-    for api in getDictVal(apis, 'apis'):
-        if getDictVal(api, 'path') == path:
+    for api in util.getDictVal(apis, 'apis'):
+        if util.getDictVal(api, 'path') == path:
             apiDoc = api
             break
 
     if apiDoc is None:
         raise Exception("未找到apiDoc", path)
 
-    method = getDictVal(apiDoc, 'method')
-    parametersDoc = getDictVal(apiDoc, 'parameters')
+    method = util.getDictVal(apiDoc, 'method')
+    parametersDoc = util.getDictVal(apiDoc, 'parameters')
 
     if len(parameters) < len(parametersDoc):
         raise Exception("请求参数不全", path)
 
     for idx, paramDoc in enumerate(parametersDoc):
-        position = getDictVal(paramDoc, 'position')
+        position = util.getDictVal(paramDoc, 'position')
         if position == 'header':
             headers = parameters[idx]
 
@@ -87,7 +87,7 @@ def doRequest2(session: requests.Session, path: str, parameters: List[dict],
     method, url, params, data, files, json, headers = genApiMetaData(
         path, parameters)
 
-    if getDictVal(kwargs, 'headers') is None:
+    if util.getDictVal(kwargs, 'headers') is None:
         kwargs['headers'] = headers
     else:
         kwargs['headers'] = dict(headers, **kwargs['headers'])
